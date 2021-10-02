@@ -18,14 +18,26 @@ public class ExAvaliacao2 {
         System.out.print("Tabela = ");
         ImprimeTabela(tabela);
         int[] subTabela = ProcurarSubCadeia(tabela);
-        System.out.print("\nSub-Tabela = ");
-        ImprimeTabela(subTabela);
+        if(subTabela == null){
+            System.out.println("Tabela já está ordenada!");
+        }
+        else{
+            System.out.println("Sub-Tabela:");
+            ImprimeTabela(subTabela);
+        }
     }
 
     public static void ImprimeTabela(int[] t){
-        for(int i: t){
-            System.out.printf("%d ", i);
+        System.out.print("{");
+        for(int i = 0; i < t.length; i++){
+            if(i != t.length - 1){
+                System.out.printf("%d, ", t[i]);
+            }
+            else{
+                System.out.printf("%d}", t[i]);
+            }
         }
+        System.out.println();
     }
 
     public static int MaxTabela(int[] t){
@@ -62,18 +74,31 @@ public class ExAvaliacao2 {
                     }
                 }
             }
-        }
-        // Verificar quais os numeros fora de ordem e adiciona-los a subcadeia
-        int indice = 0;
-        int[] subCadeia = new int[t.length];
+        }        
+        // Verificar a partir de quando e ate quando os numeros estão desordenados
+        int inicio = 0, fim = 0;
+        boolean Inicio = false;
         for(int k = 0; k < t.length; k++){
-            if(t[k] != tOrdenada[k]){
-                subCadeia[indice++] = t[k];
+            // se o inicio ainda n tiver sido definido e o t[k] for diferente de tOrdenada[k]
+            if(Inicio == false && t[k] != tOrdenada[k]){
+                // colocar Inicio a true e atribuir a inicio o valor de k
+                Inicio = true;
+                inicio = k;
+            }
+            else{
+                // depois de ser descoberto inicio ver até onde os numeros estão desordenados
+                if(t[k] != tOrdenada[k]){
+                    fim = k;
+                }
             }
         }
-        // copiar a subCadeia para a subTabela para o caso de o length da subCadeia for menor que o length de t, não aparecerem 0's
-        int[] subTabela = new int[indice];
-        System.arraycopy(subCadeia, 0, subTabela, 0, indice);
+        if(inicio == fim){
+            return null;
+        }
+        // criar uma subtabela com length = fim-inicio+1 pois fim e inicio referem se a indices e referem se a posição do elemento na tabela e não ao numero do elemento
+        int[] subTabela = new int[fim-inicio+1];
+        // copiar para a subTabela a sub-cadeia do t original
+        System.arraycopy(t, inicio, subTabela, 0, fim-inicio+1);
         return subTabela;
     }
 }
